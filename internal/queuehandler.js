@@ -3,37 +3,15 @@ const { musa, urichk, ytdl, sc } = require('./../internal/config.js');
 var qsys = []
 
 async function play(msg, url, connection) {
-    if(msg.member.voice.channel) {
-        msg.member.voice.channel.join().then(async (nconnection) => {
-            if(urichk(url) === 1) {
-                const song = await ytdl(url);
-                const dispatcher = nconnection.play(song, {type: 'opus'});
-                dispatcher.on('finish', () => {
-                    var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
-                    if (gqueue.queue.length > 0) return play(false, url, nconnection)
-                    return nconnection.channel.leave();
-                })
-            } else {
-                sc.download(url, '3JLYybc5BG7YPqpXxjNj8OQMnRMGYbIm').then(stream => {
-                    const dispatcher = nconnection.play(stream);
-                    dispatcher.on('finish', () => {
-                        var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
-                        if(gqueue.queue.length > 0) return play(false, url, nconnection)
-                        return nconnection.channel.leave();
-                    })
-                })
-            }
-        })
-    } else {
-        msg.channel.send('You are not in a VC.')
-    }
-    if(connection) {
-        if(urichk(url) === 1) {
+    var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
+    if (connection && msg) {
+        if (urichk(url) === 1) {
             const song = await ytdl(url);
             const dispatcher = connection.play(song, {type: 'opus'});
             dispatcher.on('finish', () => {
                 var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
-                if (gqueue.queue.length > 0) return play(false, url, connection)
+                gqueue.queue.splice(0, 1);
+                if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0], connection)
                 return connection.channel.leave();
             })
         } else {
@@ -41,11 +19,38 @@ async function play(msg, url, connection) {
                 const dispatcher = connection.play(stream);
                 dispatcher.on('finish', () => {
                     var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
-                    if(gqueue.queue.length > 0) return play(false, url, connection)
+                    gqueue.queue.splice(0, 1);
+                    if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0], connection)
                     return connection.channel.leave();
                 })
             })
         }
+    }
+    if(msg && msg.member.voice.channel) {
+        msg.member.voice.channel.join().then(async (nconnection) => {
+            if(urichk(url) === 1) {
+                const song = await ytdl(url);
+                const dispatcher = nconnection.play(song, {type: 'opus'});
+                dispatcher.on('finish', () => {
+                    var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
+                    gqueue.queue.splice(0,1);
+                    if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0], nconnection)
+                    return nconnection.channel.leave();
+                })
+            } else {
+                sc.download(url, '3JLYybc5BG7YPqpXxjNj8OQMnRMGYbIm').then(stream => {
+                    const dispatcher = nconnection.play(stream);
+                    dispatcher.on('finish', () => {
+                        var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
+                        gqueue.queue.splice(0,1);
+                        if(gqueue.queue.length > 0) return play(msg, gqueue.queue[0], nconnection)
+                        return nconnection.channel.leave();
+                    })
+                })
+            }
+        })
+    } else {
+        msg.channel.send('You are not in a VC.')
     }
 }
 
