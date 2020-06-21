@@ -54,6 +54,16 @@ async function play(msg, url, connection) {
     }
 }
 
+function remove(msg, guid, connection) {
+    var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
+    if(gqueue.queue.length > 0) {
+        gqueue.queue.splice(0, 1)
+        play(msg, gqueue.queue[0], connection)
+    } else {
+        msg.channel.send('There is nothing left in the queue.')
+    }
+}
+
 function add(guid, url, msg) {
     var guildqueue = qsys.find(queues => queues.guid === guid);
     if(guildqueue) {
@@ -72,9 +82,6 @@ function add(guid, url, msg) {
     }
 }
 
-function remove(guid, num) {
-
-}
-
 exports.add = add;
 exports.queue = qsys;
+exports.remove = remove;

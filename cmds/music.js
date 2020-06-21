@@ -16,6 +16,14 @@ async function command(msg, args) {
                 msg.channel.send('Sorry, you didn\'t provide a SoundCloud or YouTube link.')
         }
     }
+    if(args[0] === 'skip'){
+        var connection = musa.voice.connections.find(vc => vc.channel.id === msg.member.voice.channelID);
+        if(connection){
+            remove(msg, msg.guild.id, connection)
+        } else {
+            msg.channel.send('Sorry, you aren\'t in the VC.')
+        }
+    }
     console.log(args);
 }
 
