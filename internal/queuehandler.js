@@ -11,7 +11,7 @@ async function play(msg, url, connection) {
             dispatcher.on('finish', () => {
                 var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
                 gqueue.queue.splice(0, 1);
-                if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0], connection)
+                if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0].url, connection)
                 connection.channel.leave();
                 var number = qsys.map(function(guild) { return guild.guid; }).indexOf(gqueue.guid);
                 qsys.splice(number, 1);
@@ -22,7 +22,7 @@ async function play(msg, url, connection) {
                 dispatcher.on('finish', () => {
                     var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
                     gqueue.queue.splice(0, 1);
-                    if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0], connection)
+                    if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0].url, connection)
                     connection.channel.leave();
                     var number = qsys.map(function(guild) { return guild.guid; }).indexOf(gqueue.guid);
                     qsys.splice(number, 1);
@@ -38,7 +38,7 @@ async function play(msg, url, connection) {
                 dispatcher.on('finish', () => {
                     var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
                     gqueue.queue.splice(0,1);
-                    if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0], nconnection)
+                    if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0].url, nconnection)
                     nconnection.channel.leave();
                     var number = qsys.map(function(guild) { return guild.guid; }).indexOf(gqueue.guid);
                     qsys.splice(number, 1);
@@ -49,7 +49,7 @@ async function play(msg, url, connection) {
                     dispatcher.on('finish', () => {
                         var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
                         gqueue.queue.splice(0,1);
-                        if(gqueue.queue.length > 0) return play(msg, gqueue.queue[0], nconnection)
+                        if(gqueue.queue.length > 0) return play(msg, gqueue.queue[0].url, nconnection)
                         nconnection.channel.leave();
                         var number = qsys.map(function(guild) { return guild.guid; }).indexOf(gqueue.guid);
                         qsys.splice(number, 1);
@@ -59,14 +59,16 @@ async function play(msg, url, connection) {
         })
     } else {
         msg.channel.send('You are not in a VC.')
+        var number = qsys.map(function(guild) { return guild.guid; }).indexOf(msg.guild.id);
+        qsys.splice(number, 1);
     }
 }
 
 function remove(msg, guid, connection) {
     var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
-    if(gqueue.queue.length > 0) {
+    if(gqueue.queue.length > 1) {
         gqueue.queue.splice(0, 1)
-        play(msg, gqueue.queue[0], connection)
+        play(msg, gqueue.queue[0].url, connection)
     } else {
         msg.channel.send('There is nothing left in the queue.')
     }
@@ -75,17 +77,26 @@ function remove(msg, guid, connection) {
 function add(guid, url, msg) {
     var guildqueue = qsys.find(queues => queues.guid === guid);
     if(guildqueue) {
-        if(guildqueue.queue.includes(url)) {
+        if(guildqueue.queue.find(table => table.url === url)) {
             return console.log('Error URL already in queue')
         } else {
-            guildqueue.queue.push(url);
+            guildqueue.queue.push({
+                url: url,
+                sender: msg.member.displayName
+            });
+            console.log(guildqueue.queue)
             return console.log('URL Added')
         }
     } else {
-        var push = {};
-        push["guid"] = guid;
-        push["queue"] = new Array(url);
-        qsys.push(push);
+        qsys.push({
+            guid: guid,
+            queue: [
+                {
+                    url: url,
+                    sender: msg.member.displayName
+                }
+            ]
+        });
         play(msg, url, false);
     }
 }
