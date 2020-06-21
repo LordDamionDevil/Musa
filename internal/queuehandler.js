@@ -12,7 +12,9 @@ async function play(msg, url, connection) {
                 var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
                 gqueue.queue.splice(0, 1);
                 if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0], connection)
-                return connection.channel.leave();
+                connection.channel.leave();
+                var number = qsys.map(function(guild) { return guild.guid; }).indexOf(gqueue.guid);
+                qsys.splice(number, 1);
             })
         } else {
             sc.download(url, '3JLYybc5BG7YPqpXxjNj8OQMnRMGYbIm').then(stream => {
@@ -21,7 +23,9 @@ async function play(msg, url, connection) {
                     var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
                     gqueue.queue.splice(0, 1);
                     if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0], connection)
-                    return connection.channel.leave();
+                    connection.channel.leave();
+                    var number = qsys.map(function(guild) { return guild.guid; }).indexOf(gqueue.guid);
+                    qsys.splice(number, 1);
                 })
             })
         }
@@ -35,7 +39,9 @@ async function play(msg, url, connection) {
                     var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
                     gqueue.queue.splice(0,1);
                     if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0], nconnection)
-                    return nconnection.channel.leave();
+                    nconnection.channel.leave();
+                    var number = qsys.map(function(guild) { return guild.guid; }).indexOf(gqueue.guid);
+                    qsys.splice(number, 1);
                 })
             } else {
                 sc.download(url, '3JLYybc5BG7YPqpXxjNj8OQMnRMGYbIm').then(stream => {
@@ -44,7 +50,9 @@ async function play(msg, url, connection) {
                         var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
                         gqueue.queue.splice(0,1);
                         if(gqueue.queue.length > 0) return play(msg, gqueue.queue[0], nconnection)
-                        return nconnection.channel.leave();
+                        nconnection.channel.leave();
+                        var number = qsys.map(function(guild) { return guild.guid; }).indexOf(gqueue.guid);
+                        qsys.splice(number, 1);
                     })
                 })
             }
