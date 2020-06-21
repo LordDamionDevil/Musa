@@ -108,3 +108,8 @@ dist
 
 # Lock File for Package
 package-lock.json
+
+# Remove FFMpeg
+ffmpeg.*
+ffplay.*
+ffprobe.*
