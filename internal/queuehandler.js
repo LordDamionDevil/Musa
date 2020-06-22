@@ -3,12 +3,12 @@ const { musa, urichk, ytdl, sc } = require('./../internal/config.js');
 var qsys = []
 
 async function play(msg, url, connection) {
-    var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
     if (connection && msg) {
         if (urichk(url) === 1) {
             const song = await ytdl(url, { filter: "audioonly", highWaterMark: 1<<25 });
             const dispatcher = connection.play(song, {type: 'opus'});
             dispatcher.on('finish', () => {
+                var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
                 gqueue.queue.splice(0, 1);
                 if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0].url, connection)
                 connection.channel.leave();
@@ -19,6 +19,7 @@ async function play(msg, url, connection) {
             sc.download(url, '3JLYybc5BG7YPqpXxjNj8OQMnRMGYbIm').then(stream => {
                 const dispatcher = connection.play(stream);
                 dispatcher.on('finish', () => {
+                    var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
                     gqueue.queue.splice(0, 1);
                     if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0].url, connection)
                     connection.channel.leave();
@@ -34,6 +35,7 @@ async function play(msg, url, connection) {
                 const song = await ytdl(url, { filter: "audioonly", highWaterMark: 1<<25 });
                 const dispatcher = nconnection.play(song, {type: 'opus'});
                 dispatcher.on('finish', () => {
+                    var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
                     gqueue.queue.splice(0,1);
                     if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0].url, nconnection)
                     nconnection.channel.leave();
@@ -44,6 +46,7 @@ async function play(msg, url, connection) {
                 sc.download(url, '3JLYybc5BG7YPqpXxjNj8OQMnRMGYbIm').then(stream => {
                     const dispatcher = nconnection.play(stream);
                     dispatcher.on('finish', () => {
+                        var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
                         gqueue.queue.splice(0,1);
                         if(gqueue.queue.length > 0) return play(msg, gqueue.queue[0].url, nconnection)
                         nconnection.channel.leave();
