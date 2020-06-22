@@ -6,7 +6,7 @@ async function play(msg, url, connection) {
     var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
     if (connection && msg) {
         if (urichk(url) === 1) {
-            const song = await ytdl(url);
+            const song = await ytdl(url, { filter: "audioonly", highWaterMark: 1<<25 });
             const dispatcher = connection.play(song, {type: 'opus'});
             dispatcher.on('finish', () => {
                 var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
@@ -33,7 +33,7 @@ async function play(msg, url, connection) {
     if(msg && msg.member.voice.channel) {
         msg.member.voice.channel.join().then(async (nconnection) => {
             if(urichk(url) === 1) {
-                const song = await ytdl(url);
+                const song = await ytdl(url, { filter: "audioonly", highWaterMark: 1<<25 });
                 const dispatcher = nconnection.play(song, {type: 'opus'});
                 dispatcher.on('finish', () => {
                     var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
