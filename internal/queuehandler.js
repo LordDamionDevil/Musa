@@ -88,7 +88,7 @@ async function add(guid, url, msg) {
                             url: url,
                             sender: msg.member.displayName
                         });
-                        msg.channel.send(`${info.title} has been added to the queue.`)
+                        msg.channel.send(`**${info.title}** has been added to the queue.`)
                     }).catch(err => { return msg.channel.send('Sorry, You didn\'t provide a valid YouTube link.') });
                     break;
                 case 2:
@@ -98,7 +98,7 @@ async function add(guid, url, msg) {
                             url: url,
                             sender: msg.member.displayName
                         });
-                        msg.channel.send(`${info.title} has been added to the queue.`)
+                        msg.channel.send(`**${info.title}** has been added to the queue.`)
                     }).catch(err => msg.channel.send('Sorry, You didn\'t provide a valid SoundCloud link.'))
                     break;
                 default:
@@ -120,7 +120,7 @@ async function add(guid, url, msg) {
                         ]
                     });
                     play(msg, url, false);
-                    msg.channel.send(`${info.title} has been added to the queue & started playing.`)
+                    msg.channel.send(`**${info.title}** has been added to the queue & started playing.`)
                 }).catch(err => msg.channel.send('Sorry, You didn\'t provide a valid YouTube link.'));
                 break;
             case 2:
@@ -135,7 +135,7 @@ async function add(guid, url, msg) {
                             }
                         ]
                     });
-                    msg.channel.send(`${info.title} has been added to the queue & started playing.`)
+                    msg.channel.send(`**${info.title}** has been added to the queue & started playing.`)
                     play(msg, url, false);
                 }).catch(err => msg.channel.send('Sorry, You didn\'t provide a valid SoundCloud link.'))
                 break;
