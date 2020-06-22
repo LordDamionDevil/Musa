@@ -17,6 +17,7 @@ function urlck(url) {
 }
 
 exports.musa = musa;
+exports.dapi = dapi;
 exports.prefix = prefix;
 exports.token = token;
 exports.sc = sc;

@@ -1,4 +1,4 @@
-const { musa, urichk } = require('./../internal/config.js');
+const { musa, urichk, pembed, dapi } = require('./../internal/config.js');
 const { add, remove, queue } = require('./../internal/queuehandler.js');
 
 async function command(msg, args) {
@@ -24,7 +24,40 @@ async function command(msg, args) {
         }
     }
     if(args[0] === 'queue') {
-        
+        var guild = queue.find(queues => queues.guid === msg.guild.id);
+        if(guild) {
+            var qclon = guild.queue.map((x) => x);
+            qclon.splice(0, 1);
+            if(qclon.length > 0) {
+                const Pagination = new pembed.FieldsEmbed();
+                Pagination.setArray(qclon)
+                Pagination.setAuthorizedUsers([ msg.author.id ])
+                Pagination.setChannel(msg.channel)
+                Pagination.setElementsPerPage(5)
+                Pagination.formatField(
+                        '# - Song',
+                        t =>
+                            `**${qclon.indexOf(t) + 1}** - [**${t.name}**](${t.url}) requested by ${t.sender}`
+                );
+                Pagination.embed
+                    .setTitle('Now Playing...')
+                    .setDescription([
+                        `[**${guild.queue[0].name}**](${guild.queue[0].url}) requested by **${guild.queue[0].sender}**`,
+                    ])
+                    .setColor(0xFE9257);
+                Pagination.build();
+            } else {
+                const embed = new dapi.MessageEmbed()
+                    .setColor(0xFE9257)
+                    .setTitle('Now Playing...')
+                    .setDescription([
+                        `[**${guild.queue[0].name}**](${guild.queue[0].url}) requested by **${guild.queue[0].sender}**`,
+                    ])
+                msg.channel.send(embed);
+            }
+        } else {
+            msg.channel.send('I am not playing in this guild so there is no queue.')
+        }
     }
     console.log(args);
 }
