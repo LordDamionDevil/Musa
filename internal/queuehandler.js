@@ -74,30 +74,36 @@ function remove(msg, guid, connection) {
     }
 }
 
-function add(guid, url, msg) {
+async function add(guid, url, msg) {
     var guildqueue = qsys.find(queues => queues.guid === guid);
     if(guildqueue) {
         if(guildqueue.queue.find(table => table.url === url)) {
             return console.log('Error URL already in queue')
         } else {
-            guildqueue.queue.push({
-                url: url,
-                sender: msg.member.displayName
-            });
+            await ytdl.getInfo(url, (err, info) => {
+                guildqueue.queue.push({
+                    name: info.title,
+                    url: url,
+                    sender: msg.member.displayName
+                });
+            }).catch(err => { return msg.channel.send('Sorry, You didn\'t provide a valid YouTube link.') });
             console.log(guildqueue.queue)
             return console.log('URL Added')
         }
     } else {
-        qsys.push({
-            guid: guid,
-            queue: [
-                {
-                    url: url,
-                    sender: msg.member.displayName
-                }
-            ]
-        });
-        play(msg, url, false);
+        await ytdl.getInfo(url, (err, info) => {
+            qsys.push({
+                guid: guid,
+                queue: [
+                    {
+                        name: info.title,
+                        url: url,
+                        sender: msg.member.displayName
+                    }
+                ]
+            });
+            play(msg, url, false);
+        }).catch(err => msg.channel.send('Sorry, You didn\'t provide a valid YouTube link.'));
     }
 }
 

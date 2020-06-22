@@ -5,10 +5,10 @@ async function command(msg, args) {
     if(args[0] === 'play') {
         switch (urichk(args[1])) {
             case 1:
-                add(msg.guild.id, args[1], msg)
+                await add(msg.guild.id, args[1], msg)
                 break;
             case 2:
-                add(msg.guild.id, args[1], msg)
+                await add(msg.guild.id, args[1], msg)
                 //msg.channel.send(`${args[1]} is a SoundCloud link.`)
                 break;
             default:
