@@ -24,6 +24,7 @@ async function command(msg, args) {
         }
     }
     console.log(args);
+    console.log(queue);
 }
 
 exports.command = command;

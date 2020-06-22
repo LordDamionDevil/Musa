@@ -88,7 +88,6 @@ async function add(guid, url, msg) {
                             url: url,
                             sender: msg.member.displayName
                         });
-                        console.log(guildqueue.queue)
                         console.log('URL Added')
                     }).catch(err => { return msg.channel.send('Sorry, You didn\'t provide a valid YouTube link.') });
                     break;
@@ -99,7 +98,6 @@ async function add(guid, url, msg) {
                             url: url,
                             sender: msg.member.displayName
                         });
-                        console.log(guildqueue.queue)
                         console.log('URL Added')
                     }).catch(err => msg.channel.send('Sorry, You didn\'t provide a valid SoundCloud link.'))
                     break;
