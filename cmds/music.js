@@ -34,6 +34,7 @@ async function command(msg, args) {
                 Pagination.setAuthorizedUsers([ msg.author.id ])
                 Pagination.setChannel(msg.channel)
                 Pagination.setElementsPerPage(5)
+                Pagination.setDisabledNavigationEmojis(['delete']);
                 Pagination.formatField(
                         '# - Song',
                         t =>
