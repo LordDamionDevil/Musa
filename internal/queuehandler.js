@@ -80,30 +80,68 @@ async function add(guid, url, msg) {
         if(guildqueue.queue.find(table => table.url === url)) {
             return console.log('Error URL already in queue')
         } else {
-            await ytdl.getInfo(url, (err, info) => {
-                guildqueue.queue.push({
-                    name: info.title,
-                    url: url,
-                    sender: msg.member.displayName
-                });
-            }).catch(err => { return msg.channel.send('Sorry, You didn\'t provide a valid YouTube link.') });
-            console.log(guildqueue.queue)
-            return console.log('URL Added')
+            switch (urichk(url)) {
+                case 1:
+                    await ytdl.getInfo(url, (err, info) => {
+                        guildqueue.queue.push({
+                            name: info.title,
+                            url: url,
+                            sender: msg.member.displayName
+                        });
+                        console.log(guildqueue.queue)
+                        console.log('URL Added')
+                    }).catch(err => { return msg.channel.send('Sorry, You didn\'t provide a valid YouTube link.') });
+                    break;
+                case 2:
+                    sc.getInfo(url, '3JLYybc5BG7YPqpXxjNj8OQMnRMGYbIm').then(info => {
+                        guildqueue.queue.push({
+                            name: info.title,
+                            url: url,
+                            sender: msg.member.displayName
+                        });
+                        console.log(guildqueue.queue)
+                        console.log('URL Added')
+                    }).catch(err => msg.channel.send('Sorry, You didn\'t provide a valid SoundCloud link.'))
+                    break;
+                default:
+                    console.log('An Error Occured.')
+            }
         }
     } else {
-        await ytdl.getInfo(url, (err, info) => {
-            qsys.push({
-                guid: guid,
-                queue: [
-                    {
-                        name: info.title,
-                        url: url,
-                        sender: msg.member.displayName
-                    }
-                ]
-            });
-            play(msg, url, false);
-        }).catch(err => msg.channel.send('Sorry, You didn\'t provide a valid YouTube link.'));
+        switch (urichk(url)) {
+            case 1:
+                await ytdl.getInfo(url, (err, info) => {
+                    qsys.push({
+                        guid: guid,
+                        queue: [
+                            {
+                                name: info.title,
+                                url: url,
+                                sender: msg.member.displayName
+                            }
+                        ]
+                    });
+                    play(msg, url, false);
+                }).catch(err => msg.channel.send('Sorry, You didn\'t provide a valid YouTube link.'));
+                break;
+            case 2:
+                sc.getInfo(url, '3JLYybc5BG7YPqpXxjNj8OQMnRMGYbIm').then(info => {
+                    qsys.push({
+                        guid: guid,
+                        queue: [
+                            {
+                                name: info.title,
+                                url: url,
+                                sender: msg.member.displayName
+                            }
+                        ]
+                    });
+                    play(msg, url, false);
+                }).catch(err => msg.channel.send('Sorry, You didn\'t provide a valid SoundCloud link.'))
+                break;
+            default:
+                console.log('An Error Occured.')
+        }
     }
 }
 
