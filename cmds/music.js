@@ -9,7 +9,6 @@ async function command(msg, args) {
                 break;
             case 2:
                 await add(msg.guild.id, args[1], msg)
-                //msg.channel.send(`${args[1]} is a SoundCloud link.`)
                 break;
             default:
                 msg.channel.send('Sorry, you didn\'t provide a SoundCloud or YouTube link.')
