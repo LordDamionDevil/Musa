@@ -4,6 +4,7 @@ const prefix = process.env.prefix;
 const token = process.env.token;
 const sc = require('soundcloud-downloader');
 const ytdl = require('ytdl-core-discord');
+const pagembed = require('discord-paginationembed');
 
 const musa = new dapi.Client();
 
@@ -21,3 +22,4 @@ exports.token = token;
 exports.sc = sc;
 exports.ytdl = ytdl;
 exports.urichk = urlck;
+exports.pembed = pagembed;
