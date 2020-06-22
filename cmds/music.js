@@ -5,7 +5,7 @@ async function command(msg, args) {
     if(args[0] === 'play') {
         switch (urichk(args[1])) {
             case 1:
-                    add(msg.guild.id, args[1], msg)
+                add(msg.guild.id, args[1], msg)
                 break;
             case 2:
                 add(msg.guild.id, args[1], msg)
