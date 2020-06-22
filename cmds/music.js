@@ -1,17 +1,11 @@
-const { musa, urichk, ytdl, sc } = require('./../internal/config.js');
+const { musa, urichk } = require('./../internal/config.js');
 const { add, remove, queue } = require('./../internal/queuehandler.js');
 
 async function command(msg, args) {
     if(args[0] === 'play') {
         switch (urichk(args[1])) {
             case 1:
-                try {
-                    await ytdl.getURLVideoID(args[1])
-                    msg.channel.send(`${args[1]} is a YouTube link.`)
-                    //add(msg.guild.id, args[1], msg)
-                } catch(e) {
-                    msg.channel.send(`${args[1]} is not a valid YouTube link.`)
-                }
+                    add(msg.guild.id, args[1], msg)
                 break;
             case 2:
                 add(msg.guild.id, args[1], msg)
