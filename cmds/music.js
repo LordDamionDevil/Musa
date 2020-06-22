@@ -29,17 +29,17 @@ async function command(msg, args) {
             var qclon = guild.queue.map((x) => x);
             qclon.splice(0, 1);
             if(qclon.length > 0) {
-                const Pagination = new pembed.FieldsEmbed();
-                Pagination.setArray(qclon)
-                Pagination.setAuthorizedUsers([ msg.author.id ])
-                Pagination.setChannel(msg.channel)
-                Pagination.setElementsPerPage(5)
-                Pagination.setDisabledNavigationEmojis(['delete']);
-                Pagination.formatField(
+                const Pagination = new pembed.FieldsEmbed()
+                    .setArray(qclon)
+                    .setAuthorizedUsers([ msg.author.id ])
+                    .setChannel(msg.channel)
+                    .setElementsPerPage(5)
+                    .setDisabledNavigationEmojis(['delete'])
+                    .formatField(
                         '# - Song',
                         t =>
                             `**${qclon.indexOf(t) + 1}** - [**${t.name}**](${t.url}) requested by ${t.sender}`
-                );
+                    );
                 Pagination.embed
                     .setTitle('Now Playing...')
                     .setDescription([
