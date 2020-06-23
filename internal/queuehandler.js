@@ -1,4 +1,4 @@
-const { musa, urichk, ytdl, sc } = require('./../internal/config.js');
+const { musa, urichk, ytdl, sc, scid } = require('./../internal/config.js');
 
 var qsys = []
 
@@ -17,7 +17,7 @@ async function play(msg, url, connection) {
                 qsys.splice(number, 1);
             })
         } else {
-            sc.download(url, '3JLYybc5BG7YPqpXxjNj8OQMnRMGYbIm').then(stream => {
+            sc.download(url, scid).then(stream => {
                 const dispatcher = connection.play(stream);
                 dispatcher.on('finish', () => {
                     var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
@@ -46,7 +46,7 @@ async function play(msg, url, connection) {
                     qsys.splice(number, 1);
                 })
             } else {
-                sc.download(url, '3JLYybc5BG7YPqpXxjNj8OQMnRMGYbIm').then(stream => {
+                sc.download(url, scid).then(stream => {
                     const dispatcher = nconnection.play(stream);
                     dispatcher.on('finish', () => {
                         var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
@@ -104,7 +104,7 @@ async function add(guid, url, msg) {
                     }).catch(err => { return msg.channel.send('Sorry, You didn\'t provide a valid YouTube link.') });
                     break;
                 case 2:
-                    sc.getInfo(url, '3JLYybc5BG7YPqpXxjNj8OQMnRMGYbIm').then(info => {
+                    sc.getInfo(url, scid).then(info => {
                         guildqueue.queue.push({
                             name: info.title,
                             url: url,
