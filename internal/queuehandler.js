@@ -9,6 +9,7 @@ async function play(msg, url, connection) {
             const dispatcher = connection.play(song, {type: 'opus'});
             dispatcher.on('finish', () => {
                 var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
+                if(gqueue.skip) delete gqueue.skip;
                 gqueue.queue.splice(0, 1);
                 if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0].url, connection)
                 connection.channel.leave();
@@ -20,6 +21,7 @@ async function play(msg, url, connection) {
                 const dispatcher = connection.play(stream);
                 dispatcher.on('finish', () => {
                     var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
+                    if(gqueue.skip) delete gqueue.skip;
                     gqueue.queue.splice(0, 1);
                     if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0].url, connection)
                     connection.channel.leave();
@@ -36,6 +38,7 @@ async function play(msg, url, connection) {
                 const dispatcher = nconnection.play(song, {type: 'opus'});
                 dispatcher.on('finish', () => {
                     var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
+                    if(gqueue.skip) delete gqueue.skip;
                     gqueue.queue.splice(0,1);
                     if (gqueue.queue.length > 0) return play(msg, gqueue.queue[0].url, nconnection)
                     nconnection.channel.leave();
@@ -47,6 +50,7 @@ async function play(msg, url, connection) {
                     const dispatcher = nconnection.play(stream);
                     dispatcher.on('finish', () => {
                         var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
+                        if(gqueue.skip) delete gqueue.skip;
                         gqueue.queue.splice(0,1);
                         if(gqueue.queue.length > 0) return play(msg, gqueue.queue[0].url, nconnection)
                         nconnection.channel.leave();
@@ -66,10 +70,19 @@ async function play(msg, url, connection) {
 function remove(msg, guid, connection) {
     var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
     if(gqueue.queue.length > 1) {
-        gqueue.queue.splice(0, 1)
-        play(msg, gqueue.queue[0].url, connection)
+        var listeners = connection.channel.members.size - 1;
+        if(gqueue.skip && gqueue.skip.current.find(users => users === msg.author.id)) return msg.channel.send(`You have already voted to skip!\nVotes:\n**${gqueue.skip.current.length}/${gqueue.skip.required}**`)
+        if(!gqueue.skip) gqueue.skip = { required: Math.ceil(listeners / 2), current: [ msg.author.id ] };
+        if(!gqueue.skip.current.find(users => users === msg.author.id)) gqueue.skip.current.push(msg.author.id);
+        if(gqueue.skip.current.length >= gqueue.skip.required) {
+            gqueue.queue.splice(0, 1);
+            delete gqueue.skip;
+            play(msg, gqueue.queue[0].url, connection);
+        } else {
+            msg.channel.send(`You are now logged for skipping the song!\nVotes:\n**${gqueue.skip.current.length}/${gqueue.skip.required}**`);
+        }
     } else {
-        msg.channel.send('There is nothing left in the queue.')
+        msg.channel.send('There is nothing left in the queue.');
     }
 }
 
@@ -87,7 +100,7 @@ async function add(guid, url, msg) {
                             url: url,
                             sender: msg.member.displayName
                         });
-                        msg.channel.send(`**${info.title}** has been added to the queue.`)
+                        msg.channel.send(`**${info.title}** has been added to the queue.`);
                     }).catch(err => { return msg.channel.send('Sorry, You didn\'t provide a valid YouTube link.') });
                     break;
                 case 2:
@@ -97,11 +110,11 @@ async function add(guid, url, msg) {
                             url: url,
                             sender: msg.member.displayName
                         });
-                        msg.channel.send(`**${info.title}** has been added to the queue.`)
+                        msg.channel.send(`**${info.title}** has been added to the queue.`);
                     }).catch(err => msg.channel.send('Sorry, You didn\'t provide a valid SoundCloud link.'))
                     break;
                 default:
-                    console.log('An Error Occured.')
+                    console.log('An Error Occured.');
             }
         }
     } else {
@@ -119,7 +132,7 @@ async function add(guid, url, msg) {
                         ]
                     });
                     play(msg, url, false);
-                    msg.channel.send(`**${info.title}** has been added to the queue & started playing.`)
+                    msg.channel.send(`**${info.title}** has been added to the queue & started playing.`);
                 }).catch(err => msg.channel.send('Sorry, You didn\'t provide a valid YouTube link.'));
                 break;
             case 2:
@@ -134,12 +147,12 @@ async function add(guid, url, msg) {
                             }
                         ]
                     });
-                    msg.channel.send(`**${info.title}** has been added to the queue & started playing.`)
+                    msg.channel.send(`**${info.title}** has been added to the queue & started playing.`);
                     play(msg, url, false);
                 }).catch(err => msg.channel.send('Sorry, You didn\'t provide a valid SoundCloud link.'))
                 break;
             default:
-                console.log('An Error Occured.')
+                console.log('An Error Occured.');
         }
     }
 }
