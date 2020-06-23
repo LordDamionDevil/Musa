@@ -72,7 +72,7 @@ function remove(msg, guid, connection) {
     if(gqueue.queue.length > 1) {
         var listeners = connection.channel.members.size - 1;
         if(gqueue.skip && gqueue.skip.current.find(users => users === msg.author.id)) return msg.channel.send(`You have already voted to skip!\nVotes:\n**${gqueue.skip.current.length}/${gqueue.skip.required}**`)
-        if(!gqueue.skip) gqueue.skip = { required: Math.ceil(listeners / 2), current: [ msg.author.id ] };
+        if(!gqueue.skip) gqueue.skip = { required: Math.round(listeners / 2), current: [ msg.author.id ] };
         if(!gqueue.skip.current.find(users => users === msg.author.id)) gqueue.skip.current.push(msg.author.id);
         if(gqueue.skip.current.length >= gqueue.skip.required) {
             gqueue.queue.splice(0, 1);
