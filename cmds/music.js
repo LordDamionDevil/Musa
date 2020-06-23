@@ -37,7 +37,7 @@ async function command(msg, args) {
                     .formatField(
                         '# - Song',
                         t =>
-                            `**${qclon.indexOf(t) + 1}** - [**${t.name}**](${t.url}) requested by ${t.sender}`
+                            `**${qclon.indexOf(t) + 1}** - [**${t.name}**](${t.url}) requested by **${t.sender}**`
                     );
                 Pagination.embed
                     .setTitle('Now Playing...')
@@ -57,6 +57,33 @@ async function command(msg, args) {
             }
         } else {
             msg.channel.send('I am not playing in this guild so there is no queue.')
+        }
+    }
+    if(args[0] === 'pause' && msg.member.hasPermission(["ADMINISTRATOR"]) || args[0] === 'resume' && msg.member.hasPermission(["ADMINISTRATOR"])) {
+        var connection = musa.voice.connections.find(vc => vc.channel.id === msg.member.voice.channelID);
+        if(connection){
+            switch (args[0]) {
+                case 'pause':
+                    if(!connection.dispatcher.paused){
+                        connection.dispatcher.pause();
+                        msg.channel.send('Playback has been paused.')
+                    } else {
+                        msg.channel.send('Playback is already paused.')
+                    }
+                    break;
+                case 'resume':
+                    if(connection.dispatcher.paused){
+                        connection.dispatcher.resume();
+                        msg.channel.send('Playback has been resumed.')
+                    } else {
+                        msg.channel.send('Playback isn\'t paused.')
+                    }
+                    break;
+                default:
+                    console.log('An Error Occured.')
+            }
+        } else {
+            msg.channel.send('Sorry, you aren\'t in a VC with me.')
         }
     }
     console.log(args);
