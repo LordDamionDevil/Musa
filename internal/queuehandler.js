@@ -1,4 +1,4 @@
-const { musa, urichk, ytdl, sc, scid } = require('./../internal/config.js');
+const { urichk, ytdl, sc, scid } = require('./../internal/config');
 
 var qsys = []
 

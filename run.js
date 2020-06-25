@@ -1,10 +1,10 @@
-const { token, prefix, musa } = require('./internal/config.js');
+const { token, prefix, musa } = require('./internal/config');
 
 musa.on('ready', () => console.log(`Logged in as ${musa.user.tag}`));
 
 function cmdcheck(cmd, msg, args) {
     try {
-        const { command } = require(`./cmds/${cmd}.js`);
+        const { command } = require(`./cmds/${cmd}`);
         return command(msg, args)
     } catch (e) {
         console.log(e);
@@ -22,6 +22,9 @@ musa.on('message', (msg) => {
 
     switch (cmd) {
         case 'music':
+            cmdcheck(cmd, msg, args)
+            break;
+        case 'help':
             cmdcheck(cmd, msg, args)
             break;
         default:

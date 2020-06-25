@@ -1,5 +1,5 @@
-const { musa, urichk, pembed, dapi } = require('./../internal/config.js');
-const { add, remove, queue } = require('./../internal/queuehandler.js');
+const { musa, urichk, pembed, dapi } = require('./../internal/config');
+const { add, remove, queue } = require('./../internal/queuehandler');
 
 async function command(msg, args) {
     if(args[0] === 'play') {
