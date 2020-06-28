@@ -1,4 +1,4 @@
-const { musa, urichk, pembed, dapi } = require('./../internal/config');
+const { musa, urichk, pembed, dapi, mstz } = require('./../internal/config');
 const { add, remove, queue } = require('./../internal/queuehandler');
 
 async function command(msg, args) {
@@ -25,6 +25,7 @@ async function command(msg, args) {
     if(args[0] === 'queue') {
         var guild = queue.find(queues => queues.guid === msg.guild.id);
         if(guild) {
+            var connection = msg.guild.voice.connection;
             var qclon = guild.queue.map((x) => x);
             qclon.splice(0, 1);
             if(qclon.length > 0) {
@@ -42,16 +43,17 @@ async function command(msg, args) {
                 Pagination.embed
                     .setTitle('Now Playing...')
                     .setDescription([
-                        `[**${guild.queue[0].name}**](${guild.queue[0].url}) requested by **${guild.queue[0].sender}**`,
+                        `[**${guild.queue[0].name}**](${guild.queue[0].url}) requested by **${guild.queue[0].sender}**\nTime: **${mstz(connection.dispatcher.streamTime)}/${mstz(guild.queue[0].time)}**`,
                     ])
                     .setColor(0xFE9257);
                 Pagination.build();
             } else {
+                var connection = msg.guild.voice.connection;
                 const embed = new dapi.MessageEmbed()
                     .setColor(0xFE9257)
                     .setTitle('Now Playing...')
                     .setDescription([
-                        `[**${guild.queue[0].name}**](${guild.queue[0].url}) requested by **${guild.queue[0].sender}**`,
+                        `[**${guild.queue[0].name}**](${guild.queue[0].url}) requested by **${guild.queue[0].sender}**\nTime: **${mstz(connection.dispatcher.streamTime)}/${mstz(guild.queue[0].time)}**`,
                     ])
                 msg.channel.send(embed);
             }

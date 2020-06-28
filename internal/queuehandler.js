@@ -98,7 +98,8 @@ async function add(guid, url, msg) {
                         guildqueue.queue.push({
                             name: info.title,
                             url: url,
-                            sender: msg.member.displayName
+                            sender: msg.member.displayName,
+                            time: Math.round(info.length_seconds * 1000)
                         });
                         msg.channel.send(`**${info.title}** has been added to the queue.`);
                     }).catch(err => { return msg.channel.send('Sorry, You didn\'t provide a valid YouTube link.') });
@@ -108,7 +109,8 @@ async function add(guid, url, msg) {
                         guildqueue.queue.push({
                             name: info.title,
                             url: url,
-                            sender: msg.member.displayName
+                            sender: msg.member.displayName,
+                            time: info.full_duration
                         });
                         msg.channel.send(`**${info.title}** has been added to the queue.`);
                     }).catch(err => msg.channel.send('Sorry, You didn\'t provide a valid SoundCloud link.'))
@@ -127,7 +129,8 @@ async function add(guid, url, msg) {
                             {
                                 name: info.title,
                                 url: url,
-                                sender: msg.member.displayName
+                                sender: msg.member.displayName,
+                                time: Math.round(info.length_seconds * 1000)
                             }
                         ]
                     });
@@ -143,7 +146,8 @@ async function add(guid, url, msg) {
                             {
                                 name: info.title,
                                 url: url,
-                                sender: msg.member.displayName
+                                sender: msg.member.displayName,
+                                time: info.full_duration
                             }
                         ]
                     });
