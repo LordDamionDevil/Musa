@@ -27,6 +27,9 @@ musa.on('message', (msg) => {
         case 'help':
             cmdcheck(cmd, msg, args)
             break;
+        case 'info':
+            cmdcheck(cmd, msg, args)
+            break;
         default:
             msg.channel.send('That command doesn\'t exist.');
     }

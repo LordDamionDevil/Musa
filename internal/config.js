@@ -31,8 +31,7 @@ function msToTime(ms) {
         min = '' + min;
         min = ('00' + min).substring(min.length);
         return hrs + ":" + min + ":" + sec;
-    }
-    else {
+    } else {
         return min + ":" + sec;
     }
 }
