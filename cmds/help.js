@@ -20,6 +20,7 @@ async function command(msg, args) {
                 .setTitle('Musa\'s Help Section')
                 .setThumbnail(musa.user.displayAvatarURL())
                 .addField('?help', 'Display all commands/utilities.')
+                .addField('?info', 'Shows the info of the bot(Version, Library, Counts, Uptime and invite to support server)')
                 .addField('?music', 'Music Command e.g. **?music play (SoundCloud or YouTube URL)** do **?help music** for more information');
             return msg.channel.send(embed);
     }

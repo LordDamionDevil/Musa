@@ -11,7 +11,7 @@ async function command(msg, args) {
     var embed = new dapi.MessageEmbed()
         .setColor(7664119)
         .setAuthor('Musa | Prefix: ?', musa.user.displayAvatarURL())
-        .addField('Version', '1.0.0', true)
+        .addField('Version', '1.0.4', true)
         .addField('NodeJS', '12.13.1', true)
         .addField('Library', '[discord.js](https://discord.js.org/)', true)
         .addField('Guilds', musa.guilds.cache.size, true)

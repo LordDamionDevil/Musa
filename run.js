@@ -1,6 +1,19 @@
 const { token, prefix, musa } = require('./internal/config');
 
-musa.on('ready', () => console.log(`Logged in as ${musa.user.tag}`));
+musa.on('ready', () => {
+    console.log(`Logged in as ${musa.user.tag}`)
+    musa.user.setPresence({ activity: { name: `${musa.guilds.cache.size} Servers | Prefix: ?`, type: 'WATCHING' } })
+    var staint = 1
+    musa.setInterval(() => {
+        if(staint === 0) {
+            staint++
+            musa.user.setPresence({ activity: { name: `${musa.guilds.cache.size} Servers | Prefix: ?`, type: 'WATCHING' } })
+        } else {
+            staint--
+            musa.user.setPresence({ activity: { name: `${musa.users.cache.size} Users | Prefix: ?`, type: 'LISTENING' } })
+        }
+    }, 30000)
+});
 
 function cmdcheck(cmd, msg, args) {
     try {

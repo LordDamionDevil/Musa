@@ -70,7 +70,7 @@ async function play(msg, url, connection) {
 function remove(msg, guid, connection) {
     var gqueue = qsys.find(queues => queues.guid === msg.guild.id);
     if(gqueue.queue.length > 1) {
-        var listeners = connection.channel.members.size - 1;
+        var listeners = connection.channel.members.filter(listener => listener.user.bot === false).size;
         if(gqueue.skip && gqueue.skip.current.find(users => users === msg.author.id)) return msg.channel.send(`You have already voted to skip!\nVotes:\n**${gqueue.skip.current.length}/${gqueue.skip.required}**`)
         if(!gqueue.skip) gqueue.skip = { required: Math.round(listeners / 2), current: [ msg.author.id ] };
         if(!gqueue.skip.current.find(users => users === msg.author.id)) gqueue.skip.current.push(msg.author.id);
