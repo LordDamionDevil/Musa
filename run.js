@@ -16,9 +16,8 @@ musa.on('ready', () => {
 });
 
 musa.on('voiceStateUpdate', (oldState, newState) => {
-    var channel = newState.member.voice.channel
-    if(channel.size === 1 && musa.voice.connections.find(vc => vc.channel.id === newState.member.voice.channelID)){
-        channel.leave();
+    if(newState.member.voice.channel.members.size === 1 && musa.voice.connections.find(vc => vc.channel.id === newState.member.voice.channelID)){
+        newState.member.voice.channel.leave();
     }
 });
 
