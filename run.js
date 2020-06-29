@@ -15,6 +15,13 @@ musa.on('ready', () => {
     }, 30000)
 });
 
+musa.on('voiceStateUpdate', (oldState, newState) => {
+    var channel = newState.member.voice.channel
+    if(channel.size === 1 && musa.voice.connections.find(vc => vc.channel.id === newState.member.voice.channelID)){
+        channel.leave();
+    }
+});
+
 function cmdcheck(cmd, msg, args) {
     try {
         const { command } = require(`./cmds/${cmd}`);

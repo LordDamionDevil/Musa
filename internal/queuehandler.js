@@ -61,7 +61,7 @@ async function play(msg, url, connection) {
             }
         })
     } else {
-        msg.channel.send('You are not in a VC.')
+        msg.channel.send('You are not in a VC or the VC is full.')
         var number = qsys.map(function(guild) { return guild.guid; }).indexOf(msg.guild.id);
         qsys.splice(number, 1);
     }
