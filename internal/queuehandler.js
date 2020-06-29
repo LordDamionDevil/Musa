@@ -31,7 +31,7 @@ async function play(msg, url, connection) {
             })
         }
     }
-    if(msg && msg.member.voice.channel) {
+    if(msg && msg.member.voice.channel && !msg.member.voice.channel.full) {
         msg.member.voice.channel.join().then(async (nconnection) => {
             if(urichk(url) === 1) {
                 const song = await ytdl(url, { filter: "audioonly", highWaterMark: 1<<25 });

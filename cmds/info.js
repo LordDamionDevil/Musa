@@ -10,9 +10,9 @@ async function command(msg, args) {
     var uptime = `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds`;
     var embed = new dapi.MessageEmbed()
         .setColor(7664119)
-        .setAuthor('Musa | Prefix: ?', musa.user.displayAvatarURL())
-        .addField('Version', '1.0.4', true)
-        .addField('NodeJS', '12.13.1', true)
+        .setAuthor('Musa | Prefix: m?', musa.user.displayAvatarURL())
+        .addField('Version', '1.0.5', true)
+        .addField('NodeJS', '12.16.3', true)
         .addField('Library', '[discord.js](https://discord.js.org/)', true)
         .addField('Guilds', musa.guilds.cache.size, true)
         .addField('Users', musa.users.cache.size, true)

@@ -25,6 +25,7 @@ async function command(msg, args) {
     if(args[0] === 'queue') {
         var guild = queue.find(queues => queues.guid === msg.guild.id);
         if(guild) {
+            if(!msg.guild.me.hasPermission([ "MANAGE_MESSAGES", "ADD_REACTIONS", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS" ])) return msg.channel.send('I am missing certain permissions. Please make sure you didn\'t uncheck permissions when you added me.')
             var connection = msg.guild.voice.connection;
             var qclon = guild.queue.map((x) => x);
             qclon.splice(0, 1);
@@ -48,6 +49,7 @@ async function command(msg, args) {
                     .setColor(0xFE9257);
                 Pagination.build();
             } else {
+                if(!msg.guild.me.hasPermission([ "MANAGE_MESSAGES", "ADD_REACTIONS", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS" ])) return msg.channel.send('I am missing certain permissions. Please make sure you didn\'t uncheck permissions when you added me.')
                 var connection = msg.guild.voice.connection;
                 const embed = new dapi.MessageEmbed()
                     .setColor(0xFE9257)
