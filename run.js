@@ -1,4 +1,5 @@
 const { token, prefix, musa } = require('./internal/config');
+const { queue } = require('./internal/queuehandler');
 
 musa.on('ready', () => {
     console.log(`Logged in as ${musa.user.tag}`)
@@ -16,8 +17,12 @@ musa.on('ready', () => {
 });
 
 musa.on('voiceStateUpdate', (oldState, newState) => {
-    if(newState.member.voice.channel.members.size === 1 && musa.voice.connections.find(vc => vc.channel.id === newState.member.voice.channelID)){
-        newState.member.voice.channel.leave();
+    if(newState.guild.me.voice.channel && newState.guild.me.voice.channel.members.size === 1){
+        newState.guild.me.voice.channel.leave()
+    }
+    if(oldState.member.user.username === musa.user.username && !newState.member.voice.channel){
+        var number = queue.map(function(guild) { return guild.guid; }).indexOf(oldState.guild.id);
+        queue.splice(number, 1);
     }
 });
 
