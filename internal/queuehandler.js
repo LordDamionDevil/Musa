@@ -139,7 +139,7 @@ async function add(guid, url, msg) {
                 }).catch(err => msg.channel.send('Sorry, You didn\'t provide a valid YouTube link.'));
                 break;
             case 2:
-                sc.getInfo(url, '3JLYybc5BG7YPqpXxjNj8OQMnRMGYbIm').then(info => {
+                sc.getInfo(url, scid).then(info => {
                     qsys.push({
                         guid: guid,
                         queue: [
